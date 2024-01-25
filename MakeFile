@@ -1,0 +1,10 @@
+.PHONY: format
+format:
+	python -m isort .
+	python -m black .
+	python -m ruff check . --fix
+
+
+.PHONY: develop
+develop: install
+	python -m pre_commit install

@@ -1,0 +1,24 @@
+name: Pull request rules
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  enforce-pr-title:
+    name: Enforce PR title
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v6
+      with:
+        script: |
+          const REGEX = RegExp("([A-Z]{2,4}-\\d{1,5})\\s?\\|\\s?(.+)");
+ 
+          const { title } = context.payload.pull_request;
+          
+          if (!REGEX.test(title)) {
+            core.setFailed(
+              `Pull Request title "${title}" failed to match regex - ${REGEX}`
+            );
+            return;
+          }
