@@ -65,3 +65,6 @@ data/
 .env.dev
 .env.prod
 .env.staging
+
+
+.ipynb_checkpoints

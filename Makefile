@@ -45,7 +45,7 @@ start_notebook:
 	@echo "Done!"
 
 .PHONY: stop_notebook
-stop_notebook:
+stop_notebook: clean_notebook
 	@echo "stopping development server..."
 	docker stop $(CONTAINER_NAME)
 	@echo "Done!"
