@@ -57,3 +57,11 @@ docs/_build/
 
 # PyBuilder
 target/
+
+#ignore data folder
+data/
+
+.env
+.env.dev
+.env.prod
+.env.staging

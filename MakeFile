@@ -55,3 +55,14 @@ stop_notebook:
 
 clean: clean_notebook
 	docker rm $(CONTAINER_NAME)
+
+
+.PHONY: install
+install:
+	python -m pip install --upgrade pip
+	python -m pip install --editable .
+	python -m pip install -U -r requirements/requirements.dev.txt
+
+.PHONY: develop
+develop: install
+	python -m pre_commit install
