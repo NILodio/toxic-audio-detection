@@ -1,64 +1,41 @@
-# toxic-audio-detection
+# Python Data Science container
 
-Project created with MLOps-Template cookiecutter. For more info: https://mlopsstudygroup.github.io/mlops-guide/
+This repository created to support https://hands-on.cloud articles:
 
+* [How to run Jupiter, Keras, Tensorflow and other ML libs in Docker](https://hands-on.cloud/how-to-run-jupiter-keras-tensorflow-pandas-sklearn-and-matplotlib-in-docker-container/)
+* [How to build Anaconda Python Data Science Docker container](https://hands-on.cloud/how-to-build-python-data-science-docker-container-based-on-anaconda/)
 
-## 📋 Requirements
+[![CircleCI](https://circleci.com/gh/andreivmaksimov/python_data_science.svg?style=svg)](https://circleci.com/gh/andreivmaksimov/python_data_science)
 
-* DVC
-* Python3 and pip
-* Access to IBM Cloud Object Storage
+This is fully ready Docker container with:
+ - NumPy
+ - Pandas
+ - Sklearn
+ - Matplotlib
+ - Seaborn
+ - pyyaml
+ - h5py
+ - Jupyter
+ - Tensorflow
+ - Keras
+ - OpenCV 3
 
-## 🏃🏻 Running Project
+We're building this container on top of [Ubuntu 20.04 Docker container](https://hub.docker.com/_/ubuntu/) ([Dockerfile](https://github.com/andreivmaksimov/python_data_science/blob/master/Dockerfile)) and [Anaconda Docker container](https://hub.docker.com/r/continuumio/anaconda3/) ([Dockerfile](https://github.com/andreivmaksimov/python_data_science/blob/master/Dockerfile.anaconda))
 
-### 🔑 Setup IBM Bucket Credentials for IBM COS
+### Running container
 
-#### MacOS and Linux
-Setup your credentials on ```~/.aws/credentials``` and ```~/.aws/config```. DVC works perfectly with IBM Obejct Storage, although it uses S3 protocol, you can also see this in other portions of the repository.
-
-
-~/.aws/credentials
-
-```credentials
-[default]
-aws_access_key_id = {Key ID}
-aws_secret_access_key = {Access Key}
+We'll use ```notebooks``` forlder to store Jupyter Notebooks:
+```sh
+mkdir notebooks
 ```
 
-
-### ✅ Pre-commit Testings
-
-In order to activate pre-commit testing you need ```pre-commit```
-
-Installing pre-commit with pip
+Run Docker container with the following command:
+```sh
+docker run -it -p 8888:8888 -p 6006:6006 -d -v $(pwd)/notebooks:/notebooks amaksimov/python_data_science
 ```
-pip install pre-commit
-```
+We're using following parameters:
+- ```-p 8888:8888``` to export Jupyter Web interface
+- ```-p 6006:6006``` to export TensorflowDashboard Web interface
+- ```-d``` to run Docker container in background
+- ```-v notebooks:/notebooks``` to mount just created *notebooks* folder Docker inside container
 
-Installing pre-commit on your local repository. Keep in mind this creates a Github Hook.
-```
-pre-commit install
-```
-
-Now everytime you make a commit, it will run some tests defined on ```.pre-commit-config.yaml``` before allowing your commit.
-
-**Example**
-```
-$ git commit -m "Example commit"
-
-black....................................................................Passed
-pytest-check.............................................................Passed
-```
-
-
-### ⚗️ Using DVC
-
-Download data from the DVC repository (analog to ```git pull```)
-```
-dvc pull
-```
-
-Reproduces the pipeline using DVC
-```
-dvc repro
-```
