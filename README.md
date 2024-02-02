@@ -1,4 +1,4 @@
-# toxi-audio-detection
+# toxic-audio-detection
 
 Project created with MLOps-Template cookiecutter. For more info: https://mlopsstudygroup.github.io/mlops-guide/
 
@@ -53,7 +53,7 @@ pytest-check.............................................................Passed
 
 ### ⚗️ Using DVC
 
-Download data from the DVC repository(analog to ```git pull```)
+Download data from the DVC repository (analog to ```git pull```)
 ```
 dvc pull
 ```
