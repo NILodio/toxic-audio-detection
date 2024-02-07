@@ -57,7 +57,14 @@ python src/scripts/fetch_raw_data.py
 ---
 
 ## 🚀 Windows Instructions 🚀
+### bug fix on notebook - docker container
 
+1. use git bash as of now 
+2. change the token as follows in line 8 `c.NotebookApp.token = ""  ` file location `toxic-audio-detection\conf\.jupyter\jupyter_notebook_config.py`
+3. save it and build the docker image 
+4. run the container from git bash
+
+tadah!! it works right? 🥳
 ### Install pyenv for Windows 😎
 Run a PowerShell terminal as an administrator
 Run the following command:
@@ -102,7 +109,7 @@ Test your changes checking the python version on your shell. Output should be 3.
 pyenv shell 3.10.0
 python -V
 ```
-
+C:\Users\bhair\Desktop\canada_study_permit\Class_AIML\term_2\AML_2404_Lab\git_repo\toxic-audio-detection\conf\.jupyter\jupyter_notebook_config.py
 ## How to set up `make` command on Windows 😎
 
 Download mingw-get for Windows
