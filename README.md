@@ -124,6 +124,19 @@ Installation complete!
 For more help, watch the following step by step video.
 https://www.youtube.com/watch?v=taCJhnBXG_w
 
+## (alternative-choco) How to set up `make` command on Windows 😎
+1. open your powershell with admin privileges
+2. run the following command
+```
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+``` 
+3. close the powershell and open it again (allowing it to update)
+4. run `choco install make`
+5. it will automatically set the PATH in environment variables
+6. go to the project repository and run `make build_notebook` and then `make start_notebook`
+
+Currently --> it allows me to workon jupyter server, but the notebook is not inline with the common repo (updated_06_feb_24_evening)
+
 ## Cloning the project for Windows 😎
 When working on Windows you have to clone the repository using the following command (to avoid Unix chars and makefile issues)
 
