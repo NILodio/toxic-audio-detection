@@ -1,0 +1,7 @@
+prefect
+mlflow
+scikit-learn
+numpy
+pandas
+matplotlib
+nltk

@@ -1,4 +1,6 @@
 -r requirements.txt
+-r requirements.src.txt
+-r requirements.mlflow.txt
 build==0.8.0
 black==23.11.0
 ruff==0.1.6

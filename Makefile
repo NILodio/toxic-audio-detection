@@ -66,3 +66,19 @@ install:
 .PHONY: develop
 develop: install
 	python -m pre_commit install
+
+.PHONY: build_no_cache
+build_no_cache:
+	docker-compose build --no-cache
+
+.PHONY: build
+build:
+	docker-compose build
+
+.PHONY: up
+up:
+	docker-compose up --build
+
+.PHONY: down
+down:
+	docker-compose down
