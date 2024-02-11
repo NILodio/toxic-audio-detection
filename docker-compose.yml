@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    ports:
+      - 8086:8086
+    volumes:
+      - models:/mlruns
+
+  app:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    ports:
+      - 8501:8501
+
+  training:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    ports:
+      - 4200:4200
+    volumes:
+      - models:/mlruns
+    x-develop:
+      watch:
+        - action: sync
+          path: .
+          target: /src
+      
+  prefect-db:
+    image: postgres:15.4-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=prefect
+    ports:
+      - '5432:5432'
+    volumes:
+      - prefect-db:/var/lib/postgresql/data
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: ./mlflow/Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - models:/mlruns
+
+volumes:
+  models:
+  prefect-db:

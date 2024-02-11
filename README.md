@@ -191,3 +191,106 @@ python src/scripts/fetch_raw_data.py
 The data should start downloading under `/data` within the project repository.
 
 Important: you should be on the project's Python version using pyenv, and with the version set globally and locally. Check previous pyenv steps.
+
+# Overview 🏗️
+
+The full setup consists of three steps:
+1) Training - A training script trains a model for the Threat dataset with sklearn, training is orchestrated by prefect and the models metrics and artifacts (the actual models) are uploaded to mlflow. 
+
+2) Serving - The model is pulled and FastAPI delivers the prediction, a streamlit app serves as the user interface.
+
+
+The individual services are packaged as docker containers and setup with docker compose.
+
+## How to use
+
+**Prerequisite**: Install Docker
+
+**Start docker compose (from project folder)**
+
+```
+    docker compose up --build
+    or
+    make up
+```
+
+**Access individual services**
+
+- Prefect `http://localhost:4200`
+- mlflow `http://localhost:5000`
+- FastAPI (to test) `http://localhost:8086/docs`
+- Streamlit UI `http://localhost:8501`
+
+**Create example model**
+
+Run deployment in Prefect UI, deploy model artifacts in mlflow, tag it with "production" in mflow.
+
+**Note**: The UI will only work if there is one "production" model in mlflow.
+
+## Services
+
+### 1) Docker and docker compose
+
+`docker-compose.yaml` contains the definitions for all services. 
+For every service it contains the docker image (either through `build` if based on a Dockerfile, or through `image` if a remote image). 
+Also it opens the relevant ports within your "docker compose network", so that the services can communicate with each other. 
+Additionally, a common volume for all containers that use mlflow is created and mounted into `/mlruns`. For Prometheus/Grafana a few configuration files are also mounted.
+
+To initialize all services the command `docker compose up` can be used from the project folder.
+
+### 2+3) Training script and prefect
+
+The training script and prefect (for orchestration) are packaged into one service. 
+
+The **training script** is placed under `src/model_training.py`.
+
+The `train` function is wrapped into an `mlflow` flow operator. Also, it uses mlflow autolog.
+
+**prefetc** is an orchestration tool and can therefore be used to schedule, monitor and organize jobs.
+
+Based on the training script, a **prefect deployment file** `train-deployment.yaml` is generated using the following command:
+
+`prefect deployment build src/model_training.py:train` 
+
+The **Dockerfile** ultimately glues these components together. It
+1) Creates folders
+2) Installs requirements.txt
+3) Sets the `PREFECT_API_URL` and `MLFLOW_TRACKING_URI`*
+4) Starts the server, pushes the deployment and starts an agent**
+
+*Using docker you can refer to the containers ip using `host.docker.internal` and refer to the other services with their docker compose name, e.g `http://mlflow:5000`
+
+**In this project the prefect server and the agent (who executes the scripts) are on one container.
+
+
+### 4) FastAPI
+
+**FastAPI** is a framework for high-performance API. In this project I implemented a `/predict` endpoint. If that endpoint is queried
+it will download the latest model from mlflow and output the prediction. Additionally, **prometheus_fastapi_instrumentator** scrapes events and sends them to Prometheus.
+
+**Please note**: Currently the script will fetch the first model that is in production. It won't show any error if there is 
+no model or there are multiple models.
+
+### 7) Streamlit
+
+**Streamlit** is a Python library to rapidly build UIs. The app is very simple and only passes input to the API to retrieve results.
+
+## Limitations
+
+**Multiple host machines: Kubernetes**
+
+This project is meant to be deployed on a single host machine. In practice, you might want to use Kubernetes to deploy it 
+on multiple instances to gain more isolation and scalability. **Kompose** could be an option to convert your docker compose file
+to Kubernetes yaml. 
+
+**Storage on cloud**
+
+All artifacts, logs, etc. are saved locally/on docker volumes. In practice, you would save them to the cloud.
+
+**Advanced Security**
+
+Security - of course. Authentication, SSL encryption, API authentication and what not.
+Good example using nginx. [Example](https://towardsdatascience.com/deploy-mlflow-with-docker-compose-8059f16b6039
+)
+
+## References

@@ -1,0 +1,42 @@
+###
+### A complete description of a Prefect Deployment for flow 'train'
+###
+name: test
+description: null
+version: 35400a9c7000aaa0cadb047baa2a148f
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: null
+tags: []
+parameters: {}
+schedule: null
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: train
+manifest_path: null
+storage: null
+path: /src
+entrypoint: model_training.py:train
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties: {}
+  required: null
+  definitions: null
+timestamp: '2024-02-11T21:04:09.566499+00:00'
+triggers: []
+enforce_parameter_schema: null
