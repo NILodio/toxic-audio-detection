@@ -24,12 +24,10 @@ services:
       - 4200:4200
     volumes:
       - models:/mlruns
-    x-develop:
-      watch:
-        - action: sync
-          path: .
-          target: /src
-      
+      - datasets:/datasets
+    env_file: ./.env
+
+
   prefect-db:
     image: postgres:15.4-alpine
     restart: always
@@ -50,7 +48,9 @@ services:
       - 5000:5000
     volumes:
       - models:/mlruns
+      # Add any additional volumes if needed for mlflow
 
 volumes:
   models:
   prefect-db:
+  datasets:

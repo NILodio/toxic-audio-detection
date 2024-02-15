@@ -82,3 +82,12 @@ up:
 .PHONY: down
 down:
 	docker-compose down
+
+.PHONY: clean
+clean:
+	docker-compose down
+	docker-compose rm -f
+
+.PHONY: delete
+delete:
+	docker rmi toxic-audio-detection/python_data_science:anaconda
