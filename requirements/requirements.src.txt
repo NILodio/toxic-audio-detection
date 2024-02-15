@@ -5,3 +5,5 @@ numpy
 pandas
 matplotlib
 nltk
+kaggle
+python-dotenv
