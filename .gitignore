@@ -67,5 +67,7 @@ data/
 .env.prod
 .env.staging
 
+volumes/
+
 
 .ipynb_checkpoints
