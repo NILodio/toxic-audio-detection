@@ -73,7 +73,7 @@ build_no_cache:
 
 .PHONY: build
 build:
-	docker-compose build
+	docker-compose build 
 
 .PHONY: up
 up:
