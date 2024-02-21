@@ -14,6 +14,7 @@ services:
       - 5432
     volumes: 
       - db:/var/lib/postgresql/data
+    profiles: ["develop", "all"]
   
   # --------------------------------------#
   #         Minio for storage             #
@@ -26,6 +27,7 @@ services:
     ports:
       - 9000:9000
       - 9001:9001
+    profiles: ["develop", "all"]
 
   # --------------------------------------#
   #             Prefect Server            #
@@ -51,6 +53,7 @@ services:
       - 4200:4200
     depends_on:
       - database
+    profiles: ["develop", "all"]
 
   # --------------------------------------#
   #             Docker Agent              #
@@ -67,6 +70,7 @@ services:
       - PREFECT_API_URL=http://server:4200/api
 #       Use PREFECT_API_KEY if connecting the agent to Prefect Cloud
 #     - PREFECT_API_KEY=YOUR_API_KEY
+    profiles: ["develop", "all"]
 
   # --------------------------------------#
   #             Prefect Cli               #
@@ -86,6 +90,7 @@ services:
       - PREFECT_API_URL=http://server:4200/api
 #       Use PREFECT_API_KEY to use the CLI to interact with Prefect Cloud
 #     - PREFECT_API_KEY=YOUR_API_KEY
+    profiles: ["cli"]
   # --------------------------------------#
   #               Api                     #cd
   # --------------------------------------#
@@ -97,6 +102,7 @@ services:
       - 8086:8086
     volumes:
       - models:/mlruns
+    profiles: ["all"]
   # --------------------------------------#
   #               App                     #
   # --------------------------------------#
@@ -106,6 +112,7 @@ services:
       dockerfile: ./app/Dockerfile
     ports:
       - 8501:8501
+    profiles: ["all"]
   # --------------------------------------#
   #              Mlflow                   #
   # --------------------------------------#
@@ -117,6 +124,7 @@ services:
       - 5000:5000
     volumes:
       - models:/mlruns
+    profiles: ["all", "develop"]
 
 volumes:
   prefect:
