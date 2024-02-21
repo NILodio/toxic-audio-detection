@@ -73,21 +73,29 @@ build_no_cache:
 
 .PHONY: build
 build:
-	docker-compose build
+	docker-compose --profile all build
 
 .PHONY: up
 up:
-	docker-compose up --build
+	docker-compose --profile all up --build -d
+
+.PHONY: up-dev
+up-dev:
+	docker-compose --profile develop up --build -d
 
 .PHONY: down
 down:
-	docker-compose down
+	docker-compose --profile all down
 
 .PHONY: clean
 clean:
-	docker-compose down
-	docker-compose rm -f
+	docker-compose --profile all down
+	docker-compose --profile all rm -f
 
 .PHONY: delete
 delete:
 	docker rmi toxic-audio-detection/python_data_science:anaconda
+
+.PHONY: cli
+cli:
+	docker compose run cli

@@ -41,9 +41,15 @@ Create a `.env` file in the root directory of the project. Add the necessary env
 
 ```bash
 # .env
-KAGGLE_USERNAME=
-KAGGLE_KEY=
+KAGGLE_USERNAME=your_kaggle_username
+KAGGLE_KEY=your_kaggle_api_key
 DATASET_RAW=fangfangz/audio-based-violence-detection-dataset
+PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect
+PREFECT_API_URL=http://127.0.0.1:4200/api
+MLFLOW_TRACKING_URI=http://localhost:5000
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=prefect
 ```
 
 ### Commands
@@ -209,15 +215,18 @@ The individual services are packaged as docker containers and setup with docker 
 **Start docker compose (from project folder)**
 
 ```
-    docker compose up --build
+    docker-compose --profile all build
     or
-    make up
+    make build
 ```
 
 **Access individual services**
 
 - Prefect `http://localhost:4200`
-- mlflow `http://localhost:5000`
+- Agent `http://localhost:4200`
+- Minio `http://localhost:9000`
+- Cli `bash`
+- Mlflow `http://localhost:5000`
 - FastAPI (to test) `http://localhost:8086/docs`
 - Streamlit UI `http://localhost:8501`
 
@@ -242,25 +251,11 @@ To initialize all services the command `docker compose up` can be used from the 
 
 The training script and prefect (for orchestration) are packaged into one service. 
 
-The **training script** is placed under `src/model_training.py`.
+The **training script** is placed under `flows`.
 
-The `train` function is wrapped into an `mlflow` flow operator. Also, it uses mlflow autolog.
+The **prefect** service is defined in `docker-compose.yaml` and is based on the `Dockerfile` in the `prefect` folder. It contains the prefect server and agent. The agent is used to execute the flows. The server is used to monitor the flows and artifacts.
 
-**prefetc** is an orchestration tool and can therefore be used to schedule, monitor and organize jobs.
-
-Based on the training script, a **prefect deployment file** `train-deployment.yaml` is generated using the following command:
-
-`prefect deployment build src/model_training.py:train` 
-
-The **Dockerfile** ultimately glues these components together. It
-1) Creates folders
-2) Installs requirements.txt
-3) Sets the `PREFECT_API_URL` and `MLFLOW_TRACKING_URI`*
-4) Starts the server, pushes the deployment and starts an agent**
-
-*Using docker you can refer to the containers ip using `host.docker.internal` and refer to the other services with their docker compose name, e.g `http://mlflow:5000`
-
-**In this project the prefect server and the agent (who executes the scripts) are on one container.
+[Documentation](docs/prefect.md)
 
 
 ### 4) FastAPI

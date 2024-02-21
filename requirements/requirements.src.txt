@@ -1,4 +1,5 @@
 prefect
+s3fs
 mlflow
 scikit-learn
 numpy

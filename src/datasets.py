@@ -14,7 +14,6 @@ class CustomDataset(Dataset):
     def __getitem__(self, index):
         return {
             "input_ids": self.x.input_ids[index],
-            "token_type_ids": self.x.token_type_ids[index],
             "attention_mask": self.x.attention_mask[index],
             "labels": torch.LongTensor([self.y[index]]),
         }
