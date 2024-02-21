@@ -41,9 +41,15 @@ Create a `.env` file in the root directory of the project. Add the necessary env
 
 ```bash
 # .env
-KAGGLE_USERNAME=
-KAGGLE_KEY=
+KAGGLE_USERNAME=your_kaggle_username
+KAGGLE_KEY=your_kaggle_api_key
 DATASET_RAW=fangfangz/audio-based-violence-detection-dataset
+PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect
+PREFECT_API_URL=http://127.0.0.1:4200/api
+MLFLOW_TRACKING_URI=http://localhost:5000
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=prefect
 ```
 
 ### Commands

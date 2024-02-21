@@ -6,10 +6,12 @@ services:
   database:
     image: postgres:15.2-alpine
     restart: always
+    env_file:
+      - .env
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=prefect
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     expose:
       - 5432
     volumes: 
@@ -35,6 +37,8 @@ services:
   server:
     image: prefecthq/prefect:2.11.5-python3.11
     restart: always
+    env_file:
+      - .env
     volumes:
       - prefect:/root/.prefect
     entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
@@ -46,7 +50,7 @@ services:
       #- PREFECT_UI_URL=http://external-ip:4200/api
       #- PREFECT_API_URL=http://external-ip:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect
+      - PREFECT_API_DATABASE_CONNECTION_URL=${PREFECT_API_DATABASE_CONNECTION_URL}
       # Uncomment the following line if you want to use the 'S3 Bucket' storage block instead of the older 'S3' storage
       # - EXTRA_PIP_PACKAGES=prefect-aws
     ports:
