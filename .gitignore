@@ -50,6 +50,9 @@ coverage.xml
 *.mo
 *.pot
 
+# Models h5
+*.h5
+
 # Django stuff:
 *.log
 
