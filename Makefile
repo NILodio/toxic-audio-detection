@@ -69,7 +69,7 @@ develop: install
 
 .PHONY: build_no_cache
 build_no_cache:
-	docker-compose build --no-cache
+	docker-compose --profile all build --no-cache
 
 .PHONY: build
 build:
@@ -86,6 +86,7 @@ up-dev:
 .PHONY: down
 down:
 	docker-compose --profile all down
+	docker-compose --profile cli down
 
 .PHONY: clean
 clean:
