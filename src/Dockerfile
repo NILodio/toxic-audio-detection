@@ -1,12 +1,16 @@
-FROM prefecthq/prefect:2.11.5-python3.11
+FROM continuumio/miniconda3
+
+RUN apt-get update && apt-get install -y ffmpeg
 
 RUN mkdir /src
 WORKDIR /src
 
-COPY ../requirements/requirements.src.txt .
-
+# Copy the requirements file and install dependencies
+COPY requirements/requirements.src.txt .
 RUN pip install -r requirements.src.txt
 
-COPY /src .
+# Copy the rest of your source code
+COPY . .
 
-ENV PYTHONPATH /src
+# Set the Python path
+ENV PYTHONPATH /srcpyth

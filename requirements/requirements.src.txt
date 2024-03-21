@@ -1,10 +1,15 @@
 prefect
 s3fs
 mlflow
+tensorflow
 scikit-learn
 numpy
 pandas
 matplotlib
 nltk
 kaggle
+psycopg2-binary
 python-dotenv
+pydub
+librosa
+openpyxl

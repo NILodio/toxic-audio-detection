@@ -19,7 +19,7 @@ def dowload_data(df: str, usr_name: str, key: str):
     print(os.getcwd())
     k.dataset_download_cli(df, unzip=True, force=True, path="../data/raw")
 
-    remote_file_system_block.put("data/raw", "data/raw")
+    remote_file_system_block.put_directory(local_path="../data/raw", to_path="raw")
 
 
 @flow(log_prints=True, persist_result=True, result_storage=remote_file_system_block)
