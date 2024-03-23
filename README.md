@@ -261,7 +261,6 @@ The **prefect** service is defined in `docker-compose.yaml` and is based on the 
 ### 4) FastAPI
 
 **FastAPI** is a framework for high-performance API. In this project I implemented a `/predict` endpoint. If that endpoint is queried
-it will download the latest model from mlflow and output the prediction. Additionally, **prometheus_fastapi_instrumentator** scrapes events and sends them to Prometheus.
 
 **Please note**: Currently the script will fetch the first model that is in production. It won't show any error if there is 
 no model or there are multiple models.

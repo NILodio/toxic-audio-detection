@@ -25,7 +25,7 @@ services:
     image: minio/minio:latest
     entrypoint: ["minio", "server", "--address", "0.0.0.0:9000", "--console-address", "0.0.0.0:9001", "/data"]
     volumes:
-      - "minio:/data"
+      - minio:/data
     ports:
       - 9000:9000
       - 9001:9001
@@ -89,8 +89,9 @@ services:
     env_file:
       - .env
     volumes:
-      - "./src:/src"
-      - "./data:/data"
+      - ./src:/src
+      - ./data:/data
+      - ./models:/mlruns
     environment:
       - PREFECT_API_URL=http://server:4200/api
       - MLFLOW_TRACKING_URI=http://mlflow:5000
@@ -107,8 +108,8 @@ services:
     ports:
       - 8086:8086
     volumes:
-      - models:/mlruns
-    profiles: ["all"]
+      - ./models:/mlruns
+    profiles: ["all", "develop"]
   # --------------------------------------#
   #               App                     #
   # --------------------------------------#
@@ -118,7 +119,7 @@ services:
       dockerfile: ./app/Dockerfile
     ports:
       - 8501:8501
-    profiles: ["all"]
+    profiles: ["all", "develop"]
   # --------------------------------------#
   #              Mlflow                   #
   # --------------------------------------#
@@ -129,14 +130,13 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - models:/mlruns
+      - ./models:/mlruns
     profiles: ["all", "develop"]
 
 volumes:
-  prefect:
+  models:
   db:
   minio:
-  models:
 
 networks:
   default:

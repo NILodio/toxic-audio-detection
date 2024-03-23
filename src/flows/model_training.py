@@ -2,8 +2,11 @@
 import io
 
 import librosa
+import mlflow.keras
+import mlflow.tensorflow
 import numpy as np
 import pandas as pd
+from mlflow.models import infer_signature
 from prefect import flow, task
 from prefect.filesystems import RemoteFileSystem
 from sklearn.metrics import accuracy_score, f1_score
@@ -13,7 +16,7 @@ from tensorflow.keras.models import Sequential
 
 import mlflow
 
-mlflow.set_experiment("Test")
+mlflow.set_experiment("LSTM")
 remote_file_system_block = RemoteFileSystem.load("data")
 
 
@@ -134,6 +137,7 @@ def train():
     print(x_train.shape, x_test.shape)
 
     # Start MLflow run
+
     with mlflow.start_run() as run:
         mlflow.log_param("test_size", test_size)
 
@@ -167,6 +171,7 @@ def train():
         # Evaluate model
         print("Model evaluation")
         y_pred_test = model.predict(x_test)
+        signature = infer_signature(x_test, y_pred_test)
         print(y_pred_test)
         print(y_pred_test.shape)
         print(y_test.shape)
@@ -187,18 +192,19 @@ def train():
         # Log F1 score to MLflow
         mlflow.log_metric("f1_score", f1)
 
+        print("Logging model to MLflow")
+
         # Log accuracy score to MLflow
         mlflow.log_metric("accuracy_score", test_accuracy)
 
-    print(f"Logged data and model in run: {run.info.run_id}")
-
-    if f1 >= 0.7:
-        model_uri = f"runs:/{run.info.run_id}/model"
-        mv = mlflow.register_model(model_uri, "LSTM")
-        print(f"Name: {mv.name}")
-        print(f"Version: {mv.version}")
-    else:
-        print("Model registration failed, f1 score too low (< 0.7)")
+        mlflow.tensorflow.log_model(
+            model,
+            artifact_path="model",
+            signature=signature,
+            input_example=x_test[0],
+            registered_model_name="LSTM",
+        )
+        print("run ID:", run.info.run_id)
 
 
 if __name__ == "__main__":
