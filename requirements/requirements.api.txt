@@ -1,6 +1,6 @@
-fastapi[all]
-prometheus_fastapi_instrumentator
 mlflow
+tensorflow
 scikit-learn
 pandas
 nltk
+librosa

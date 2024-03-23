@@ -1,6 +1,6 @@
 prefect
 s3fs
-mlflow
+mlflow==2.10.2
 tensorflow
 scikit-learn
 numpy

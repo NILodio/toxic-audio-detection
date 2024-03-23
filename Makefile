@@ -77,11 +77,11 @@ build:
 
 .PHONY: up
 up:
-	docker-compose --profile all up --build -d
+	docker-compose --profile develop up --build -d
 
 .PHONY: up-dev
 up-dev:
-	docker-compose --profile develop up --build -d
+	docker-compose --profile develop up --build 
 
 .PHONY: down
 down:

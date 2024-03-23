@@ -13,4 +13,4 @@ RUN pip install -r requirements.src.txt
 COPY . .
 
 # Set the Python path
-ENV PYTHONPATH /srcpyth
+ENV PYTHONPATH=/src
